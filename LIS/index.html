@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>LIS</title>
+
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122304816-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-122304816-1');
+	</script>
+
+
+	<script src="../libraries/p5.js"></script>
+	<script src="../libraries/p5.dom.js"></script>
+	<script src="../libraries/p5.sound.js"></script>
+	<script src="sketch.js"></script>
+
+	<style>
+		html, body {
+			height:100%;
+		}
+	
+		#descrip {
+			background-color:#1b5d5b;
+			color:#FFF;
+			display: flex;
+			justify-content: center;
+			padding:2%;
+		}
+		#inputArray {
+			
+			text-align: center;
+			width:80%;
+			margin-left: 5%;
+			margin-right: 5%;
+			font-size: 2.5em;
+		}
+		.contain {
+			background-color:#e4edf4;
+			margin: 0 auto;
+			padding:5%;
+		}
+		#DispOut {
+			background-color:#142c3e;
+			color:#FFF;
+			padding:2%;
+		}
+		.Labels {
+			display: table-cell;
+			background-color: #022534;
+			color:#FFF;
+			align-content:center;
+			text-align:center;
+			vertical-align: middle;
+			border: solid;
+		}
+	</style>
+</head>
+<body>
+	<div id='descrip'>
+		
+		Enter a non-empty array in which you wish to find the longest increasing subsequence, in between the square brackets below with numbers separated by commas.
+		
+	</div>
+	<div class='contain'>
+    	<input id="inputArray" value="[-7,8,2,5,3,1]">
+	</div>
+	<div id="DispOut">
+		<p id="lenlis"></p>
+		<p id="lis"></p>
+		<p id="lisin"></p>
+	</div>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>max_2D_range_sum</title>
+
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122304816-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-122304816-1');
+	</script>
+
+
+	<script src="../libraries/p5.js"></script>
+	<script src="../libraries/p5.dom.js"></script>
+	<script src="../libraries/p5.sound.js"></script>
+	<script src="sketch1.js"></script>
+
+	<style>
+		html, body {
+			height: 100%;
+		}
+
+		#description{
+			padding: 20pt;
+			display: flex;
+			justify-content: center;
+			background-color: rgba(200,200,100,.4);
+		}
+		#labelHolder{
+			width:80%;
+			margin: auto;
+			margin-top: 5%;
+			margin-bottom: 5%;
+		}
+
+		.Labels {
+			/*background-color:#043221;*/
+			background-color: #589e24;
+			color:#FFF;
+			align-content:center;
+			text-align:center;
+			/*box-shadow:4px 4px 2px 1px rgba(0, 0, 255, .2);*/
+		}
+		#button1 {
+			background-color:#000;
+			color:#FFF;
+			text-align:center;
+    		width: 90%;
+    		height: 90%;
+		}
+
+		.inputs {
+			margin: 10pt;
+		}
+		.container{
+			height: 20%;
+			display: grid;
+			grid-template-rows: 10% 30% 20% 30% 10%;
+			grid-template-columns: 10% 30% 20% 30% 10%;
+		}
+		.item-1 {
+			background-color: rgba(100,100,200,0.1) ;
+			font-size: 100%;
+			grid-column-start: 2;
+			grid-column-end: 3;
+			grid-row-start: 2;
+			grid-row-end: 3;
+		}
+		.item-2 {
+			grid-column-start: 4;
+			grid-column-end: 5;
+			grid-row-start: 2;
+			grid-row-end: 3;
+		}
+		.item-3 {
+			background-color: rgba(100,100,200,0.1); 
+			grid-column-start: 2;
+			grid-column-end: 3;
+			grid-row-start: 4;
+			grid-row-end: 5;
+		}
+		.item-4 {
+			grid-column-start: 4;
+			grid-column-end: 5;
+			grid-row-start: 4;
+			grid-row-end: 5;
+		}
+		#bContainer {
+			width: 15%;
+			height:8%;	
+			margin-left: 35%;
+			margin-right: 40%;
+		}
+		
+	</style>
+</head>
+<body>
+	<p id="description">This webpage finds Maximum 2D Range Sum in a given matrix, you can change any cell's value by clicking on the corresponding matrix cell and changing it to the desired value.</p>
+	<div class="container">
+		<div class="item item-1">Number of rows you want in the 2D array (<=30) </div>
+		<div class="item item-2"><input type="text" class="inputs" id="inp1" value="5"></div>
+		<div class="item item-3">Number of columns you want in the 2D array (<=30)</div>
+		<div class="item item-4"><input type="text" class="inputs" id="inp2" value="5"></div>
+	</div>
+	
+	<p id="labelHolder"></p>
+	<div id='bContainer'>
+		<button id="button1">Run</button>
+	</div>
+	<div id='Display'>
+		<p>Maximum Sum : <label id="maxSumLabel"></label></p>
+	</div>
+</body>
+</html>
