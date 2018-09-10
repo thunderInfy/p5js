@@ -1,6 +1,9 @@
 var creature,v,u,flag,Diameter,bg,ball,speed,low,high,supposed,count=0,Max_dis,cnv,ratio = 0.85,bot,col=17;
 var mouseCreature, widthCreature, heightCreature,once = true,Rules;
 var Score,score,spNorm,strt;
+var canvas_, MOUSECREATURE;
+
+
 function preload() {
   mouseCreature = loadImage('character.png');
   Rules = loadImage('rules.png');
@@ -13,6 +16,8 @@ function centerCanvas() {
 }
 
 function setup() {
+	document.body.style.cursor = 'none';
+
 	Score = select('#Score');
 	score = 0;
 	widthCreature = mouseCreature.width/2;
@@ -23,7 +28,15 @@ function setup() {
 	// createCanvas(width, height);
 	cnv = createCanvas(windowWidth*ratio,windowHeight*ratio);
 	centerCanvas();
-	
+	canvas_ = new _canvas();
+
+
+	MOUSECREATURE = {
+		x:mouseX - widthCreature/2,
+		y:mouseY - heightCreature/2
+	};
+
+
 	Max_dis = dist(0,0,width,height);
 	v = {
 		x:0,
@@ -179,7 +192,7 @@ function draw() {
 			background(80,0,0);
 		}	
 		draw_spooky_eye(ball.x,ball.y,ball.diameter,res);
-		draw_mouse_creature(mouseX,mouseY);
+		draw_mouse_creature();
 		// V = findDir(creature.x,creature.y,mouseX,mouseY,100);
 		// creature.x+=V[0];
 		// creature.y+=V[1];
@@ -208,25 +221,74 @@ function draw() {
 		
 	}
 }
-function draw_mouse_creature(X,Y){
-	
-	X = mouseX - widthCreature/2;
-	Y = mouseY - heightCreature/2;
+function draw_mouse_creature(){
 
-	image(mouseCreature,X,Y,widthCreature,heightCreature);
-	// fill(0);
-	// noStroke();
-	// ellipse(X,Y,100,100);
-	// stroke(255);
-	// fill(255);
-	// point(X,Y);
+	MOUSECREATURE.x = mouseX - widthCreature/2;
+	MOUSECREATURE.y = mouseY - heightCreature/2;
 
-	//drawRobot(mouseX,mouseY,100,mouseX,mouseY);
-	// V = directionfind(bot.x,bot.y,mouseX,mouseY,30);
-	// bot.x+=V[0];
-	// bot.y+=V[1];
+	within = mouseWithinCanvas(MOUSECREATURE.x, MOUSECREATURE.y);
 
+	if(within==2){
+		MOUSECREATURE.x = canvas_.mcreature.xMin;
+
+		if(MOUSECREATURE.y<canvas_.mcreature.yMax){
+			if(MOUSECREATURE.y<canvas_.mcreature.yMin){
+				MOUSECREATURE.y = canvas_.mcreature.yMin;
+			}
+		}
+		else{
+			MOUSECREATURE.y = canvas_.mcreature.yMax;
+		}
+	}
+	else if(within==3){
+		MOUSECREATURE.x = canvas_.mcreature.xMax;
+		if(MOUSECREATURE.y<canvas_.mcreature.yMax){
+			if(MOUSECREATURE.y<canvas_.mcreature.yMin){
+				MOUSECREATURE.y = canvas_.mcreature.yMin;
+			}
+		}
+		else{
+			MOUSECREATURE.y = canvas_.mcreature.yMax;
+		}
+	}
+	else if(within==4){
+		MOUSECREATURE.y = canvas_.mcreature.yMin;
+	}
+	else if(within==5){
+		MOUSECREATURE.y = canvas_.mcreature.yMax;
+	}
+
+
+
+	image(mouseCreature,MOUSECREATURE.x,MOUSECREATURE.y,widthCreature,heightCreature);
 }
+
+function _canvas(){
+	this.mcreature = {
+		xMin:0,
+		xMax:width-widthCreature,
+		yMin:0,
+		yMax:height- heightCreature
+	};
+	// this.mcreature.xMax = windowWidth*ratio+this.mcreature.xMin;
+	// this.mcreature.yMax = windowHeight*ratio+this.mcreature.yMin;
+}
+
+function mouseWithinCanvas(x,y){
+		if(x<canvas_.mcreature.xMax && x>canvas_.mcreature.xMin && 
+			y<canvas_.mcreature.yMax && y>canvas_.mcreature.yMin)
+			return 1;
+		else if(x<=canvas_.mcreature.xMin)
+			return 2;
+		else if(x>=canvas_.mcreature.xMax)
+			return 3;
+		else if(y<=canvas_.mcreature.yMin)
+			return 4;
+		else
+			return 5;
+}
+
+
 function get_vec(x,y,v){
 	factor = 0.07 * ball.diameter/350;  
 	v.x = (mouseX - x);
@@ -441,9 +503,9 @@ function windowResized() {
 }
 
 function distance_from_mouse(){
-	res = dist(mouseX,mouseY,ball.x,ball.y);
+	res = dist(MOUSECREATURE.x+widthCreature/2,MOUSECREATURE.y+heightCreature/2,ball.x,ball.y);
 	//console.log(mouseX,mouseY);
-	if(res<=ball.radius+30 || !insideTheWindow() || (millis()-strt)>=45000){
+	if(res<=ball.radius+30 || (millis()-strt)>=45000){
 		console.log(millis());
 		colorMode(HSB);
 		flag = 2;
@@ -475,139 +537,3 @@ function mousePressed(){
 	}
 	Once = true;
 }
-
-// function drawRobot(x,y,dia,x1,y1){
-// 	//drawFace(x,y,dia,x1,y1);
-// }
-// function drawFace(x,y,dia,x1,y1){
-// 	var W = drawHead(x,y,dia);
-// 	drawMouth(x,y+W[1]/2,dia*0.3);
-// 	drawWedgeLines(x,y+dia*0.1,dia*0.5,x,y-W[1]*0.5,dia/6,dia/4);
-// 	V = directionfind(x,y,x1,y1,dia);
-// 	drawEye(x-(W[0]/2-(W[0]*0.35)/2),y,W[0],V);
-// 	drawEye(x+(W[0]/2-(W[0]*0.35)/2),y,W[0],V);
-// }
-// function directionfind(x,y,x1,y1,dia){
-// 	v_x = x1-x;
-// 	v_y = y1-y;
-// 	norm_v = dist(0,0,v_x,v_y);
-// 	v_x*=dia/500;
-// 	v_y*=dia/500;
-// 	return [v_x,v_y];
-// }
-// function drawWedgeLines(x1,y1,r1,x2,y2,a,b){
-// 	var firstLine = {
-// 		x1:x2+a*cos(PI/4),
-// 		y1:y2+b*sin(PI/4),
-// 		y2:y1+r1*sin(-PI*0.4)
-// 	};
-	
-// 	var secondLine = {
-// 		x1:x2+a*cos(3*PI/4),
-// 		y1:y2+b*sin(PI/4),
-// 		y2:y1+r1*sin(-PI*0.4)
-// 	}
-
-// 	fill(col);
-// 	rect(secondLine.x1,secondLine.y2,firstLine.x1 - secondLine.x1,firstLine.y1 - secondLine.y2);
-// }
-// function drawHead(x,y,dia){
-// 	var wid = dia*1.414/2;
-// 	var hei = dia/1.414 - 0.2*dia;
-// 	noStroke();
-// 	fill(20);
-// 	arc(x,y+dia/10,dia,dia,-3*PI/4,-PI/4,CHORD);
-// 	fill(col);
-// 	arc(x,y+dia/10,dia,dia,-PI*0.59,-PI*0.41,PIE);
-// 	fill(255);
-// 	rect(x - dia/(2*1.414),y+(0.1*dia)-(dia/(2*1.414)),wid,hei);
-// 	fill(col);
-// 	arc(x,y-hei/2,dia/3,dia/2,0,PI,CHORD);
-// 	fill(20);
-// 	drawAboveEye(x,y,dia,wid,hei,true);
-// 	drawAboveEye(x,y,dia,wid,hei,false);
-// 	fill(255);
-// 	arc(x,y-dia/10,dia,dia,PI/4,3*PI/4,CHORD);
-	
-// 	return [wid,hei];
-// }
-// function drawAboveEye(X,Y,dia,wid,hei,left){
-// 	if(left==true){
-// 		sign = -1;
-// 	}
-// 	else{
-// 		sign = 1; 
-// 	}
-// 	var first = {
-// 		x:X+sign*wid*0.5,
-// 		y:Y-hei*0.5
-// 	};
-// 	var second = {
-// 		x:X,
-// 		y:Y-hei*0.5
-// 	};
-// 	var third = {
-// 		x:X+sign*(wid/2-(wid*0.35)/2),
-// 		y:Y
-// 	};
-// 	var fourth = {
-// 		x:X+sign*wid/2,
-// 		y:Y
-// 	};
-// 	quad(first.x,first.y,second.x,second.y,third.x,third.y,fourth.x,fourth.y);
-// }
-// function drawEye(x,y,w,V){
-// 	fill(0);
-// 	stroke(255,200,0);
-// 	strokeWeight(4);
-// 	var a = w*0.35;
-// 	var b = a*1.2;
-// 	ellipse(x,y,a,b);
-// 	fill(255);
-// 	noStroke();
-// 	ellipse(x+V[0],y+V[1],a/5,b/5);
-
-// }
-// function drawMouth(x,y,dia){
-// 	fill(0);
-// 	drawLowerLip(x,y,dia);
-// 	drawUpperLip(x,y,dia);
-// 	drawTongue(x,y,dia);
-// }
-// function drawLowerLip(x,y,dia){
-// 	arc(x,y,dia,dia/2,0,PI);
-// }
-// function drawUpperLip(x,y,dia){
-// 	arc(x,y,dia,dia/5,PI,0);
-// }
-// function drawTongue(x,y,dia){
-// 	fill(214,32,29);
-// 	ellipse(x,y+dia/10,dia/7,dia/5);
-// }
-// r = map(i,0,dia/5,255,220);
-// g = map(i,0,dia/5,255,180);
-// b = map(i,0,dia/5,255,180);
-// fill(r,g,b);
-
-
-// function sum(a1,a2,offset){
-// 	var s = a1+a2;
-// 	if(s<offset + TWO_PI){
-// 		return s;
-// 	}
-// 	else if(s<offset + TWO_PI*2){
-// 		return s - TWO_PI;
-// 	}
-
-// 	return s - TWO_PI*2;
-// }
-// function diff(a1,a2,offset){
-// 	var d = a1-a2;
-// 	if(d<offset - TWO_PI){
-// 		return d+TWO_PI*2;
-// 	}
-// 	else if(d<offset){
-// 		return d+TWO_PI;
-// 	}
-// 	return d;
-// }
