@@ -11,8 +11,6 @@ var GAMEOVER = 0; 					//global variable for gameover
 var GameOverSound;					//global variable for game over sound
 var Gravity, lam = 3;				//lam is initial value of objects/sec
 var levelUpScore = 25;				//after every increment of 25 in the score, level will increase 
-var poisson = [];
-var Button = null;
 
 
 function preload(){					//preload game over sound
@@ -173,7 +171,6 @@ function _canvas(){
 
 					ObjectRect.upperRatio+=0.005;
 					lam+=0.5;
-					poissonDistribution(lam/fps);
 					this.deltaScore = 0;
 					this.level++;
 
@@ -259,23 +256,7 @@ function _canvas(){
 		textSize(this.TEXTSIZE);
 		textAlign(CENTER, CENTER);
 		text("Game Over",this.canvasWidth/2,this.canvasHeight*0.4);
-		
-		if(Button == null)
-			Button = createButton("Press to restart");
-		else
-			Button.show();
-
-		Button.style('font-size',this.TEXTSIZE/1.5 + 'px');
-		Button.style('display', 'block');
-		Button.style('background-color','black');
-		Button.style('border','None');
-		Button.style('color','white');
-		Button.size(this.canvasWidth/3,this.canvasHeight/10);
-		Button.position(windowWidth/2 - this.canvasWidth/6,windowHeight*0.6);
-		document.body.style.cursor = 'default';
-		Button.mousePressed(restart);
-
-		//text("Press R to restart",this.canvasWidth/2,this.canvasHeight*0.6);
+		text("Press R to restart",this.canvasWidth/2,this.canvasHeight*0.6);
 	};
 }
 
@@ -293,7 +274,7 @@ class ObjectRect {
 		this.y = -this.B;
 
 		//lower ratio for variable speeds
-		this.lowerRatio = 0.003;
+		this.lowerRatio = 0.0025;
 		this.cnvWidth = cnvWidth;
 		this.cnvHeight = cnvHeight;
 		this.count = 0;
@@ -325,15 +306,14 @@ class ObjectRect {
 	}
 }
 
-ObjectRect.upperRatio = 0.0035;
+ObjectRect.upperRatio = 0.005;
 
 //setup function
 
 function setup() {
 	document.body.style.cursor = 'none';
 	frameRate(fps);
-	Gravity = 0.5;
-	poissonDistribution(lam/fps);
+	Gravity = 0.8;
 
 	// //creating a white background canvas for no-cursor property to hold everywhere in the window
 
@@ -357,28 +337,6 @@ function setup() {
 	canvas_.init();
 }
 
-//poisson cumulative distribution for lambda = 3 objects / 1 second
-
-function poissonDistribution(l){
-
-	poisson.splice(0,poisson.length);
-
-	var lambda = l;
-	var factorials = [1,1,2,6,24,120,720];
-	var expo = exp(-lambda);
-
-	var powersLambda = [1];
-	var poissonValues = [expo];
-
-	poisson.push(expo);
-
-	for(var i=1;i<7;i++){
-		powersLambda.push(powersLambda[i-1]*lambda);
-		poissonValues.push(powersLambda[i]*expo/factorials[i]);
-		poisson.push(poisson[i-1]+poissonValues[i]);
-	}
-	poisson.push(1);
-}
 
 //function to createObjects
 
@@ -386,10 +344,7 @@ function createObjects(){
 	var R = random(1);
 	var K;
 
-	for(K=0;K<poisson.length;K++){
-		if(R<poisson[K])
-			break;
-	}
+ 	K = Module.poissonDis(lam/fps);
 
 	for(var i=0;i<K;i++){
 		canvas_.createNewObject();
@@ -426,21 +381,21 @@ function gameOver(){
 	playSketch^=1;
 }
 
-function restart(){
-	Button.hide();
-	document.body.style.cursor = 'none';
-	GameOverSound.stop();
-	ObjectRect.upperRatio=0.005;
-	lam=3;
-	poissonDistribution(lam/fps);
-	canvas_.objects.splice(0,canvas_.objects.length);
-	collisionOccurred = 0;
-	canvas_.score = 0;
-	canvas_.level = 1;
-	canvas_.deltaScore = 0;
-	playSketch^=1;
+function keyPressed(){
+	if(playSketch==0){
+		if(keyCode==82){
+			GameOverSound.stop();
+			ObjectRect.upperRatio=0.005;
+			lam=3;
+			canvas_.objects.splice(0,canvas_.objects.length);
+			collisionOccurred = 0;
+			canvas_.score = 0;
+			canvas_.level = 1;
+			canvas_.deltaScore = 0;
+			playSketch^=1;
+		}
+	}
 }
-
 
 function windowResized(){
 	canvas_.computeCnvSize();
