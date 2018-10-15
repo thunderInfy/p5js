@@ -10,6 +10,7 @@ var drawGraph;
 var G;
 var kInp;
 var kVal;
+var describeSlider;
 
 //class for the horizontal bars
 
@@ -81,7 +82,7 @@ function setup() {
 	kInp.position(windowWidth*0.1,0);
 	kInp.size(windowWidth*0.05,windowWidth*0.025);
 	kInp.changed(kChanged);
-	let describeSlider = createP('Value of K');
+	describeSlider = createP('Value of K');
 	describeSlider.position(windowWidth*0.1,windowWidth*0.02);
 }
 
@@ -159,6 +160,7 @@ function windowResized(){
 	G.updateCoordinates(windowWidth, windowHeight, prevWid, prevHei);
 	kInp.position(windowWidth*0.1,0);
 	kInp.size(windowWidth*0.05,windowWidth*0.025);
+	describeSlider.position(windowWidth*0.1,windowWidth*0.02);
 }
 
 function setSizes(){
