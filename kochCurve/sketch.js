@@ -50,7 +50,8 @@ class KochLine{
 		this.endVec = endVec;
 	}
 	display(r=0,g=0,b=0){
-		stroke(r,g,b);
+		//stroke(r,g,b);
+		
 		line(this.startVec.x, this.startVec.y, this.endVec.x, this.endVec.y);
 	}
 	updateKochLine(){
@@ -85,16 +86,30 @@ class KochLine{
 
 function setup() {
 	createCanvas(windowWidth, windowHeight);
-	background(0);
+	noStroke();
+	//background(0);
 	
-	let k = new KochCurve(width/2,height/2,height/2.1);
-	k.display();
+	if(width>height){
+		var k = new KochCurve(width/2,height/2,height/4);
+		k.display();
 
-	let k2 = new KochCurve(width/6,2*height/5,height/4);
-	k2.display();
+		var k2 = new KochCurve(width/6,2*height/5,height/6);
+		k2.display();
 
-	let k3 = new KochCurve(5*width/6,2*height/5,height/4);
-	k3.display();
+		var k3 = new KochCurve(5*width/6,2*height/5,height/6);
+		k3.display();
+	}
+	else{
+		var k = new KochCurve(width/2,height/2,width/4);
+		k.display();
+
+		var k2 = new KochCurve(width/2,height/6,width/6);
+		k2.display();
+
+		var k3 = new KochCurve(width/2,5*height/6,width/6);
+		k3.display();
+	}
+
 	
 	for(let i=0;i<5;i++){
 		k.update();
@@ -105,5 +120,25 @@ function setup() {
 		k2.display(255,255,255);
 		k3.display(255,255,255);
 	}
+
+	fill(255);
+
+	beginShape();
+	for(let i=0;i<k.lines.length;i++){
+		vertex(k.lines[i].startVec.x, k.lines[i].startVec.y);
+	}
+	endShape();
+
+	beginShape();
+	for(let i=0;i<k2.lines.length;i++){
+		vertex(k2.lines[i].startVec.x, k2.lines[i].startVec.y);
+	}
+	endShape();
+
+	beginShape();
+	for(let i=0;i<k3.lines.length;i++){
+		vertex(k3.lines[i].startVec.x, k3.lines[i].startVec.y);
+	}
+	endShape();
 
 }

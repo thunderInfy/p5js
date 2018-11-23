@@ -47,13 +47,12 @@ class Particle {
 	}
 	
 	show(){
-	
-		stroke(0,0,255,5);
+		stroke(0,7);
 		strokeWeight(1);
 		line(this.position.x, this.position.y, this.prev.x, this.prev.y);
-	
 	}
 }
+var startSec, SHOW = false;
 
 function setup() {
 	
@@ -65,15 +64,24 @@ function setup() {
 		particles.push(new Particle());
 	
 	}
+	startSec = millis();
 }
 
 function draw() {
 
-	
-	for(let i=0; i<N; i++){
-	
-		particles[i].show();
-		particles[i].move();
-	
+	for(let j=0; j<5; j++){
+		for(let i=0; i<N; i++){
+			if(SHOW){
+				particles[i].show();
+			}
+			particles[i].move();
+		}
 	}
+	
+	if(!SHOW){
+		if((millis()- startSec) > 1000){
+			SHOW = true;
+		}
+	}
+	
 }

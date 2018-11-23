@@ -179,7 +179,7 @@ function highlight2(){
 	this.style('color','#000');
 }
 function unhighlight2(){
-	this.style('background-color','#000');
+	this.style('background-color','#563d7c');
 	this.style('color','#FFF');
 }
 
@@ -193,7 +193,7 @@ function displayResult(maxSum){
 			console.log('here');
 			if(i>=parameters.i && i<=parameters.k && j>=parameters.j && j<=parameters.l)
 				{	
-					L[i][j].style('background-color','#000');
+					L[i][j].style('background-color','#563d7c');
 					L[i][j].mouseOver(highlight2);
 					L[i][j].mouseOut(unhighlight2);
 				}
